@@ -2,8 +2,9 @@ const FILES_TO_CACHE = [
     '/',
     '/index.html',
     './styles.css',
-    './index.js'
-    //dist bundles when created
+    './index.js', 
+    "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+    './webpack.config.js'
 ]
 
 const PRECACHE = 'precache-v1';
