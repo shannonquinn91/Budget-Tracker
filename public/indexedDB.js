@@ -1,12 +1,8 @@
-//event listener on the window
-window.addEventListener("online", checkIndexedDB);
-
 //new indexeddb request for "budget", version 1
 const request = indexedDB.open("budget", 1);
 
 //initialize db
 let db;
-
 
 request.onupgradeneeded = function(event) {
     const db = event.target.result;
@@ -50,7 +46,7 @@ function checkIndexedDB() {
     const getAll = store.getAll();
 
     getAll.onsuccess = function() {
-        if (getAll.result.length > 0) {
+        
             fetch("/api/transaction/bulk", {
                 method: "POST",
                 body: JSON.stringify(getAll.result),
@@ -59,8 +55,7 @@ function checkIndexedDB() {
                     "Content-Type": "application/json"
                 }
             })
-            .then(response => response.json())
-            .then(() => {
+            .then((response) => {
                 //if success, open transaction on pending 
                 const transaction = db.transaction(["pending"], "readwrite");
 
@@ -71,8 +66,8 @@ function checkIndexedDB() {
                 store.clear();
             })
         }
-    }
+    
 }
 
-//check for app coming back online
-// window.addEventListener("online", checkIndexedDB);
+//event listener on the window
+window.addEventListener("online", checkIndexedDB);
