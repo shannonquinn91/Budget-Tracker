@@ -1,22 +1,27 @@
-//event listener
+//event listener on the window
 window.addEventListener("online", checkIndexedDB);
-
-//initialize db
-let db;
 
 //new indexeddb request for "budget", version 1
 const request = indexedDB.open("budget", 1);
 
-//create pending object store for transactions made offline, auto-increment
-request.onupgradeneeded = function(e) {
-    const db = e.target.result;
+//initialize db
+let db;
 
+
+request.onupgradeneeded = function(event) {
+    const db = event.target.result;
+    //create pending object store for transactions made offline, auto-increment
+    db.createObjectStore("pending", {autoIncrement: true});
+};
+
+request.onsucess = function(event) {
+    db = event.target.result;
     //check if online before reading from db
     if (navigator.online) {
         checkIndexedDB();
     }
-};
-
+}
+    
 //error handling
 request.onerror = function(e) {
     console.log("Error! " + e.target.errorCode);
@@ -31,6 +36,7 @@ function saveRecord(record) {
 
     //add record to pending object store
     store.add(record);
+
 };
 
 function checkIndexedDB() {
@@ -69,4 +75,4 @@ function checkIndexedDB() {
 }
 
 //check for app coming back online
-window.addEventListener("online", checkIndexedDB);
+// window.addEventListener("online", checkIndexedDB);
